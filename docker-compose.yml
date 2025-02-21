@@ -1,0 +1,41 @@
+services:
+  postgis_db:
+    image: postgis/postgis:17-3.5
+    container_name: postgis_db
+    restart: unless-stopped
+    volumes:
+      - postgis_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgisadmin
+      POSTGRES_PASSWORD: postgisadmin
+      POSTGRES_DB: MapsApp
+      #PGDATA: "/var/lib/postgresql/data/pgdata"
+      #POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      # Add extensions you need to be enabled by default in the DB. Default are the five specified below
+      # - POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology,postgis_raster,pgrouting
+    ports:
+      - "5432:5432"
+    networks:
+      - postgis-network
+
+  pgadmin:
+    container_name: postgis_pgadmin
+    image: dpage/pgadmin4:9.0
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "helpgis@admsurgut.ru"
+      PGADMIN_DEFAULT_PASSWORD: "tomato"
+      #PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    restart: unless-stopped
+    networks:
+      - postgis-network
+
+volumes:
+  postgis_db:
+  pgadmin:
+
+networks:
+  postgis-network:
