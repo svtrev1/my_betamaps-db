@@ -39,3 +39,4 @@ volumes:
 
 networks:
   postgis-network:
+    name: postgis-network
